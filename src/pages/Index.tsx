@@ -12,9 +12,11 @@ const Index = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { translate, isProcessing, result } = useTranslation();
+  const lastImageRef = useRef<string | null>(null);
 
   const handleCapture = useCallback(
     (imageBase64: string) => {
+      lastImageRef.current = imageBase64;
       translate(imageBase64, sourceLanguage, targetLanguage);
     },
     [translate, sourceLanguage, targetLanguage]
@@ -30,6 +32,7 @@ const Index = () => {
         const dataUrl = e.target?.result as string;
         setUploadedImage(dataUrl);
         const base64 = dataUrl.split(",")[1];
+        lastImageRef.current = base64;
         translate(base64, sourceLanguage, targetLanguage);
       };
       reader.readAsDataURL(file);
@@ -40,6 +43,26 @@ const Index = () => {
   const triggerFileUpload = () => {
     fileInputRef.current?.click();
   };
+
+  const handleSourceChange = useCallback(
+    (value: string) => {
+      setSourceLanguage(value);
+      if (lastImageRef.current) {
+        translate(lastImageRef.current, value, targetLanguage);
+      }
+    },
+    [translate, targetLanguage]
+  );
+
+  const handleTargetChange = useCallback(
+    (value: string) => {
+      setTargetLanguage(value);
+      if (lastImageRef.current) {
+        translate(lastImageRef.current, sourceLanguage, value);
+      }
+    },
+    [translate, sourceLanguage]
+  );
 
   return (
     <div className="relative flex h-[100dvh] flex-col bg-background">
@@ -173,8 +196,8 @@ const Index = () => {
           <LanguageSelector
             sourceLanguage={sourceLanguage}
             targetLanguage={targetLanguage}
-            onSourceChange={setSourceLanguage}
-            onTargetChange={setTargetLanguage}
+            onSourceChange={handleSourceChange}
+            onTargetChange={handleTargetChange}
           />
         </div>
       </div>
