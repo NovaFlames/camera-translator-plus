@@ -56,18 +56,10 @@ export function CameraView({ onCapture, isProcessing, onPermissionStateChange }:
     if (!videoRef.current || !canvasRef.current || isProcessing) return;
 
     const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-
-    if (!ctx) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-
-    const imageData = canvas.toDataURL("image/jpeg", 0.8);
-    const base64 = imageData.split(",")[1];
-    onCapture(base64);
+    if (!video.videoWidth) return;
+    const canvas = canvasRef.current; const ctx = canvas.getContext("2d"); if (!ctx) return;
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight; ctx.drawImage(video, 0, 0);
+    onCapture(canvas.toDataURL("image/jpeg", 0.9).split(",")[1]);
   }, [onCapture, isProcessing]);
 
   // Auto-capture every 2 seconds

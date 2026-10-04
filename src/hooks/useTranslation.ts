@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { enhanceBase64 } from "@/lib/enhanceImage";
 
 interface TranslationResult {
   detectedText: string;
@@ -20,9 +21,10 @@ export function useTranslation() {
       setError(null);
 
       try {
+        const enhanced = await enhanceBase64(imageBase64);
         const { data, error: fnError } = await supabase.functions.invoke("translate-image", {
           body: {
-            imageBase64,
+            imageBase64: enhanced,
             sourceLanguage: sourceLanguage === "auto" ? null : sourceLanguage,
             targetLanguage,
           },

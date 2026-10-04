@@ -18,7 +18,8 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const systemPrompt = `You are an expert OCR and translation system. Your task is to:
+    const systemPrompt = `You are an expert OCR and translation system. Images may be dark, noisy, blurry, rotated, upside-down, skewed, or shot at steep perspective angles. Mentally deskew and straighten the text, read carefully character by character, use surrounding context to resolve ambiguous letters, and preserve reading order and line breaks. Ignore text you truly cannot read rather than guessing wildly.
+Your task is to:
 1. Extract ALL visible text from the image
 2. Translate the text from ${sourceLanguage || "any language (auto-detect)"} to ${targetLanguage || "English"}
 3. Return ONLY a JSON object with this exact structure:
@@ -44,7 +45,7 @@ Return ONLY the JSON, no markdown, no explanation.`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
           {
