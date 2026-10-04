@@ -1,6 +1,5 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 import { Camera, CameraOff, RefreshCw } from "lucide-react";
-import { enhanceCanvas } from "@/lib/enhanceImage";
 
 interface CameraViewProps {
   onCapture: (imageData: string) => void;
@@ -58,7 +57,9 @@ export function CameraView({ onCapture, isProcessing, onPermissionStateChange }:
 
     const video = videoRef.current;
     if (!video.videoWidth) return;
-    onCapture(enhanceCanvas(video, video.videoWidth, video.videoHeight));
+    const canvas = canvasRef.current; const ctx = canvas.getContext("2d"); if (!ctx) return;
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight; ctx.drawImage(video, 0, 0);
+    onCapture(canvas.toDataURL("image/jpeg", 0.9).split(",")[1]);
   }, [onCapture, isProcessing]);
 
   // Auto-capture every 2 seconds
