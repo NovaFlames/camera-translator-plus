@@ -4,9 +4,10 @@ import { Camera, CameraOff, RefreshCw } from "lucide-react";
 interface CameraViewProps {
   onCapture: (imageData: string) => void;
   isProcessing: boolean;
+  onPermissionStateChange?: (granted: boolean | null) => void;
 }
 
-export function CameraView({ onCapture, isProcessing }: CameraViewProps) {
+export function CameraView({ onCapture, isProcessing, onPermissionStateChange }: CameraViewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -34,11 +35,13 @@ export function CameraView({ onCapture, isProcessing }: CameraViewProps) {
         await videoRef.current.play();
       }
       setHasPermission(true);
+      onPermissionStateChange?.(true);
     } catch (err) {
       console.error("Camera access error:", err);
       setHasPermission(false);
+      onPermissionStateChange?.(false);
     }
-  }, [facingMode]);
+  }, [facingMode, onPermissionStateChange]);
 
   useEffect(() => {
     startCamera();
