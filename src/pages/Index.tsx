@@ -10,6 +10,7 @@ const Index = () => {
   const [targetLanguage, setTargetLanguage] = useState("en");
   const [mode, setMode] = useState<"camera" | "upload">("camera");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [cameraDenied, setCameraDenied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { translate, isProcessing, result } = useTranslation();
   const lastImageRef = useRef<string | null>(null);
@@ -78,7 +79,11 @@ const Index = () => {
       {/* Camera or Upload view */}
       <div className="flex-1">
         {mode === "camera" ? (
-          <CameraView onCapture={handleCapture} isProcessing={isProcessing} />
+          <CameraView
+            onCapture={handleCapture}
+            isProcessing={isProcessing}
+            onPermissionStateChange={(granted) => setCameraDenied(granted === false)}
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted/30 p-4">
             {uploadedImage ? (
