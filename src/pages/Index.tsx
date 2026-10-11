@@ -66,6 +66,7 @@ const Index = () => {
   );
 
   return (
+    <main className="bg-background">
     <div className="relative flex h-[100dvh] flex-col bg-background">
       {/* Hidden file input */}
       <input
@@ -216,6 +217,20 @@ const Index = () => {
         </h1>
       </div>
     </div>
+    <section className="mx-auto max-w-2xl px-6 py-12 text-foreground">
+      <h2 className="text-2xl font-semibold">A camera translator that works in real time</h2>
+      <p className="mt-4 text-muted-foreground">
+        Point your camera at a sign, menu or document and Camera Translator reads the text and
+        translates it instantly. You can also upload a photo to translate all the text in it.
+        Dark and tilted photos are brightened and straightened automatically for better reading.
+      </p>
+      <h3 className="mt-8 text-lg font-semibold">Supported languages</h3>
+      <p className="mt-2 text-muted-foreground">
+        English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Korean, Arabic,
+        Hindi and Russian — with automatic detection of the source language.
+      </p>
+    </section>
+    </main>
   );
 };
 
