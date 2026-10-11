@@ -12,6 +12,26 @@ serve(async (req) => {
 
   try {
     const { imageBase64, sourceLanguage, targetLanguage } = await req.json();
+
+    // Validate language inputs against an allowlist so request fields cannot
+    // alter the system prompt with arbitrary text.
+    const ALLOWED_LANGUAGES = new Set([
+      "en", "es", "fr", "de", "it", "pt", "zh", "ja", "ko", "ar", "hi", "ru",
+    ]);
+    const LANGUAGE_NAMES: Record<string, string> = {
+      en: "English", es: "Spanish", fr: "French", de: "German",
+      it: "Italian", pt: "Portuguese", zh: "Chinese", ja: "Japanese",
+      ko: "Korean", ar: "Arabic", hi: "Hindi", ru: "Russian",
+    };
+    const safeSource =
+      typeof sourceLanguage === "string" && ALLOWED_LANGUAGES.has(sourceLanguage)
+        ? LANGUAGE_NAMES[sourceLanguage]
+        : null;
+    const safeTarget =
+      typeof targetLanguage === "string" && ALLOWED_LANGUAGES.has(targetLanguage)
+        ? LANGUAGE_NAMES[targetLanguage]
+        : "English";
+
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -21,7 +41,7 @@ serve(async (req) => {
     const systemPrompt = `You are an expert OCR and translation system. Images may be dark, noisy, blurry, rotated, upside-down, skewed, or shot at steep perspective angles. Mentally deskew and straighten the text, read carefully character by character, use surrounding context to resolve ambiguous letters, and preserve reading order and line breaks. Ignore text you truly cannot read rather than guessing wildly.
 Your task is to:
 1. Extract ALL visible text from the image
-2. Translate the text from ${sourceLanguage || "any language (auto-detect)"} to ${targetLanguage || "English"}
+2. Translate the text from ${safeSource || "any language (auto-detect)"} to ${safeTarget}
 3. Return ONLY a JSON object with this exact structure:
 {
   "detectedText": "the original text you found",
@@ -59,7 +79,7 @@ Return ONLY the JSON, no markdown, no explanation.`;
               },
               {
                 type: "text",
-                text: `Extract and translate all text in this image to ${targetLanguage || "English"}.`,
+                text: `Extract and translate all text in this image to ${safeTarget}.`,
               },
             ],
           },
