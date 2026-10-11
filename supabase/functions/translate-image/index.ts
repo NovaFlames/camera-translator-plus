@@ -12,6 +12,26 @@ serve(async (req) => {
 
   try {
     const { imageBase64, sourceLanguage, targetLanguage } = await req.json();
+
+    // Validate language inputs against an allowlist so request fields cannot
+    // alter the system prompt with arbitrary text.
+    const ALLOWED_LANGUAGES = new Set([
+      "en", "es", "fr", "de", "it", "pt", "zh", "ja", "ko", "ar", "hi", "ru",
+    ]);
+    const LANGUAGE_NAMES: Record<string, string> = {
+      en: "English", es: "Spanish", fr: "French", de: "German",
+      it: "Italian", pt: "Portuguese", zh: "Chinese", ja: "Japanese",
+      ko: "Korean", ar: "Arabic", hi: "Hindi", ru: "Russian",
+    };
+    const safeSource =
+      typeof sourceLanguage === "string" && ALLOWED_LANGUAGES.has(sourceLanguage)
+        ? LANGUAGE_NAMES[sourceLanguage]
+        : null;
+    const safeTarget =
+      typeof targetLanguage === "string" && ALLOWED_LANGUAGES.has(targetLanguage)
+        ? LANGUAGE_NAMES[targetLanguage]
+        : "English";
+
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
