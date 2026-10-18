@@ -227,7 +227,8 @@ const Index = () => {
       <h3 className="mt-8 text-lg font-semibold">Supported languages</h3>
       <p className="mt-2 text-muted-foreground">
         English, Spanish, French, German, Italian, Portuguese, Chinese, Japanese, Korean, Arabic,
-        Hindi and Russian — with automatic detection of the source language.
+        Hindi, Russian, Assamese, Bengali, Gujarati, Kannada, Malayalam, Marathi, Odia, Punjabi,
+        Tamil, Telugu and Urdu — with automatic detection of the source language.
       </p>
     </section>
     </main>

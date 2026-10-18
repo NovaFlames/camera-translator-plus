@@ -8,12 +8,16 @@ const corsHeaders = {
 
 const ALLOWED_LANGUAGES = new Set([
   "en", "es", "fr", "de", "it", "pt", "zh", "ja", "ko", "ar", "hi", "ru",
+  "as", "bn", "gu", "kn", "ml", "mr", "or", "pa", "ta", "te", "ur",
 ]);
 
 const LANGUAGE_NAMES: Record<string, string> = {
   en: "English", es: "Spanish", fr: "French", de: "German",
   it: "Italian", pt: "Portuguese", zh: "Chinese", ja: "Japanese",
   ko: "Korean", ar: "Arabic", hi: "Hindi", ru: "Russian",
+  as: "Assamese", bn: "Bengali", gu: "Gujarati", kn: "Kannada",
+  ml: "Malayalam", mr: "Marathi", or: "Odia", pa: "Punjabi",
+  ta: "Tamil", te: "Telugu", ur: "Urdu",
 };
 
 function jsonResponse(body: Record<string, unknown>, status = 200) {
