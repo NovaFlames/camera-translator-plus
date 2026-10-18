@@ -213,7 +213,7 @@ const Index = () => {
       {/* App title */}
       <div className="absolute left-0 right-0 top-0 bg-gradient-to-b from-background via-background/80 to-transparent pb-8 pt-4">
         <h1 className="text-center text-lg font-semibold text-foreground">
-          Camera Translator
+          Camera text translator
         </h1>
       </div>
     </div>
