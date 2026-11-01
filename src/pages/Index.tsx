@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import { useState, useCallback, useRef } from "react";
 import { CameraView } from "@/components/CameraView";
 import { TranslationOverlay } from "@/components/TranslationOverlay";
@@ -6,6 +7,18 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { Loader2, Scan, ImagePlus, Camera } from "lucide-react";
 
 const Index = () => {
+  return (
+    <>
+      <Helmet>
+        <link rel="canonical" href="https://cam-translate-go.lovable.app/" />
+        <meta property="og:url" content="https://cam-translate-go.lovable.app/" />
+      </Helmet>
+      <Main />
+    </>
+  );
+};
+
+const Main = () => {
   const [sourceLanguage, setSourceLanguage] = useState("auto");
   const [targetLanguage, setTargetLanguage] = useState("en");
   const [mode, setMode] = useState<"camera" | "upload">("camera");
